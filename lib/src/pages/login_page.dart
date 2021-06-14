@@ -1,6 +1,10 @@
 import 'package:eac/src/bloc/provider.dart';
 import 'package:eac/src/providers/usuario_provider.dart';
 import 'package:eac/src/utils/utils.dart';
+import 'package:eac/src/widgets/boton_azul.dart';
+import 'package:eac/src/widgets/custom_input.dart';
+import 'package:eac/src/widgets/labels.dart';
+import 'package:eac/src/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -8,62 +12,34 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-      children: [
-        _crearFondo(context),
-        _loginForm(context),
-      ],
-    ));
-  }
-
-  Widget _loginForm(BuildContext context) {
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SafeArea(
-            child: Container(
-              height: 180.0,
-            ),
-          ),
-          Container(
-            width: size.width * 0.85,
-            margin: EdgeInsets.symmetric(vertical: 30.0),
-            padding: EdgeInsets.symmetric(vertical: 50.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 3.0,
-                      offset: Offset(0.0, 5.0),
-                      spreadRadius: 3.0)
-                ]),
+    return Scaffold(
+      backgroundColor: Color(0xffF2F2F2),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
-              children: [
-                Text('Ingreso', style: TextStyle(fontSize: 20.0)),
-                SizedBox(height: 60.0),
-                _crearEmail(bloc),
-                SizedBox(height: 30.0),
-                _crearPassword(bloc),
-                SizedBox(height: 30.0),
-                _crearBoton(bloc)
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Logo(titulo: 'Login'),
+                  _crearEmail(bloc),
+                  _crearPassword(bloc),
+                  _crearBoton(bloc),
+                  Labels(
+                    ruta: 'registro',
+                    titulo: '¿No tienes una cuenta?',
+                    subTitulo: 'Crea una ahora!',
+                  ),
+                  Text(
+                    'Terminos y Condiciones de uso',
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                  )
+                ]),
           ),
-          TextButton(
-            child: Text('Crear una nueva cuenta'),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, 'registro'),
-          ),
-          SizedBox(
-            height: 100.0,
-          )
-        ],
+        ),
       ),
     );
   }
@@ -77,7 +53,7 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
+                icon: Icon(Icons.alternate_email, color: Colors.black),
                 hintText: 'ejemplo@correo.com',
                 labelText: 'Correo electronico',
                 counterText: snapshot.data,
@@ -138,48 +114,5 @@ class LoginPage extends StatelessWidget {
       mostrarAlerta(context, info['mensaje']);
     }
     //
-  }
-
-  Widget _crearFondo(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final fondoMorado = Container(
-      height: size.height * 0.4,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-        Color.fromRGBO(63, 63, 156, 1.0),
-        Color.fromRGBO(90, 70, 178, 1.0)
-      ])),
-    );
-
-    final circulo = Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100.0),
-          color: Color.fromRGBO(255, 255, 255, 0.05)),
-    );
-
-    return Stack(
-      children: [
-        fondoMorado,
-        Positioned(top: 90.0, left: 30.0, child: circulo),
-        Positioned(top: -40.0, right: -30.0, child: circulo),
-        Positioned(bottom: -50.0, right: -10.0, child: circulo),
-        Positioned(bottom: 120.0, right: 20.0, child: circulo),
-        Positioned(bottom: -50.0, left: -20.0, child: circulo),
-        Container(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(
-            children: [
-              Icon(Icons.person_pin_circle, color: Colors.white, size: 100.0),
-              SizedBox(height: 10.0, width: double.infinity),
-              Text('Electronic Advanced Center',
-                  style: TextStyle(color: Colors.white, fontSize: 25.0))
-            ],
-          ),
-        )
-      ],
-    );
   }
 }
